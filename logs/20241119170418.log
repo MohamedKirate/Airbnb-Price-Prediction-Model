@@ -1,0 +1,47 @@
+2024-11-19 17:04:18,717 - INFO - data_ingestion - Starting data ingestion process
+2024-11-19 17:04:18,717 - INFO - data_ingestion - Reading data from data\listings.csv
+2024-11-19 17:04:19,252 - INFO - data_ingestion - Selecting columns: ['neighbourhood_group_cleansed', 'room_type', 'accommodates', 'bathrooms', 'bedrooms', 'beds', 'price', 'availability_365', 'minimum_nights']
+2024-11-19 17:04:19,263 - INFO - data_ingestion - Performing data cleaning
+2024-11-19 17:04:19,272 - INFO - data_ingestion - Cleaning data: Dropping rows with NaN in column price
+2024-11-19 17:04:19,281 - INFO - data_ingestion - Filling NaN in numerical columns ['bathrooms', 'bedrooms', 'beds'] with 0
+2024-11-19 17:04:19,285 - INFO - data_ingestion - Saving cleaned data to artifacts\data.csv
+2024-11-19 17:04:19,709 - INFO - tools - CSV saved successfully to artifacts\data.csv
+2024-11-19 17:04:19,709 - INFO - data_ingestion - Splitting data into train and test sets
+2024-11-19 17:04:19,724 - INFO - tools - Data split successfully: (33566, 9) training samples, (3730, 9) testing samples.
+2024-11-19 17:04:19,724 - INFO - data_ingestion - Saving training data to artifacts\train.csv
+2024-11-19 17:04:20,189 - INFO - tools - CSV saved successfully to artifacts\train.csv
+2024-11-19 17:04:20,189 - INFO - data_ingestion - Saving testing data to artifacts\test.csv
+2024-11-19 17:04:20,324 - INFO - tools - CSV saved successfully to artifacts\test.csv
+2024-11-19 17:04:20,381 - INFO - data_transformation - Starting data transformation process
+2024-11-19 17:04:20,414 - INFO - data_transformation - Reading data from artifacts\data.csv
+2024-11-19 17:04:20,606 - INFO - data_transformation - Filtering columns: ['neighbourhood_group_cleansed', 'room_type', 'accommodates', 'bathrooms', 'bedrooms', 'beds', 'price', 'availability_365', 'minimum_nights']
+2024-11-19 17:04:20,617 - INFO - data_transformation - Creating feature 'text' by combining ['neighbourhood_group_cleansed', 'room_type']
+2024-11-19 17:04:21,477 - INFO - data_transformation - Dropping original categorical features: ['neighbourhood_group_cleansed', 'room_type']
+2024-11-19 17:04:21,882 - INFO - tools - CSV saved successfully to artifacts\data.csv
+2024-11-19 17:04:21,882 - INFO - data_transformation - Creating transformation pipelines
+2024-11-19 17:04:22,886 - INFO - data_transformation - Fitting target scaler
+2024-11-19 17:04:22,886 - INFO - data_transformation - Saving preprocessing object to artifacts\preprocess\preprocess.pkl
+2024-11-19 17:04:22,896 - INFO - tools - Pickle saved successfully to artifacts\preprocess\preprocess.pkl
+2024-11-19 17:04:22,896 - INFO - data_transformation - Saving target scaler to artifacts\preprocess\scaler.pkl
+2024-11-19 17:04:22,915 - INFO - tools - Pickle saved successfully to artifacts\preprocess\scaler.pkl
+2024-11-19 17:04:22,947 - INFO - model_train - Initializing model training process.
+2024-11-19 17:04:22,947 - INFO - model_train - Loading dependencies for model training.
+2024-11-19 17:04:23,201 - INFO - model_train - Preprocessing the dataset.
+2024-11-19 17:04:23,968 - INFO - model_train - Training and evaluating models.
+2024-11-19 17:04:23,968 - INFO - model_train - Training model: XGBRegressor
+2024-11-19 17:04:24,875 - INFO - model_train - R^2 Score value : 0.6672627412811314
+2024-11-19 17:04:24,877 - INFO - model_train - Training model: CatBoostRegressor
+2024-11-19 17:05:08,248 - INFO - model_train - R^2 Score value : 0.6723097491686778
+2024-11-19 17:05:08,250 - INFO - model_train - Training model: RandomForestRegressor
+2024-11-19 17:05:47,348 - INFO - model_train - R^2 Score value : 0.8101552548949629
+2024-11-19 17:05:47,349 - INFO - model_train - Training model: GradientBoostingRegressor
+2024-11-19 17:05:53,691 - INFO - model_train - R^2 Score value : 0.4105460393240221
+2024-11-19 17:05:53,692 - INFO - model_train - Training model: AdaBoostRegressor
+2024-11-19 17:05:55,563 - INFO - model_train - R^2 Score value : 0.2605085459168561
+2024-11-19 17:05:55,565 - INFO - model_train - Selecting the best model based on R^2 score.
+2024-11-19 17:05:55,566 - INFO - model_train - Model training completed. Best model: RandomForestRegressor
+2024-11-19 17:05:55,567 - INFO - hyper_tuning - Initializing hyperparameter tuning process.
+2024-11-19 17:05:55,568 - INFO - hyper_tuning - Starting hyperparameter tuning for model: RandomForestRegressor
+2024-11-19 19:49:22,229 - INFO - hyper_tuning - Hyperparameter tuning completed for RandomForestRegressor. MSE: 8.263379131855118e-05, R2 Score: 0.4859827417757172
+2024-11-19 19:49:22,270 - INFO - tools - JSON saved successfully to model\model_params.json.
+2024-11-19 19:49:22,458 - INFO - tools - Pickle saved successfully to model\model.pkl

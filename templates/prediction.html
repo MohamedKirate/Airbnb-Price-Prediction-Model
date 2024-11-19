@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Price Prediction</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(270deg, #6a11cb, #2575fc, #ff7e5f, #ff6e7f);
+            background-size: 600% 600%;
+            animation: backgroundAnimation 15s ease infinite;
+            color: #333;
+        }
+
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.4em;
+            font-weight: 700;
+            color: #2575fc;
+            background: -webkit-linear-gradient(#6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        select {
+            width: 100%;
+        }
+        input {
+            width: 95%;
+        }
+
+        input, select {
+            
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            font-family: 'Poppins', Arial, sans-serif;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus, select:focus {
+            border-color: #2575fc;
+            box-shadow: 0 0 8px rgba(37, 117, 252, 0.3);
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            padding: 12px 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        .output {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .output.success {
+            color: #2575fc;
+        }
+
+        .output.error {
+            color: #ff4d4d;
+        }
+
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 2em;
+            }
+
+            button {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form id="predictionForm">
+        <h2>Price Prediction</h2>
+
+        <label for="neighbourhood">Neighbourhood Group</label>
+        <select name="neighbourhood" id="neighbourhood" required>
+            <option value="City of Los Angeles">City of Los Angeles</option>
+            <option value="Other Cities">Other Cities</option>
+            <option value="Unincorporated Areas">Unincorporated Areas</option>
+        </select>
+
+        <label for="room_type">Room Type</label>
+        <select name="room_type" id="room_type">
+            <option value="Entire home/apt">Entire home/apt</option>
+            <option value="Private room">Private room</option>
+            <option value="Shared room">Shared room</option>
+            <option value="Hotel room">Hotel room</option>
+        </select>
+
+        <label for="accommodates">Accommodates</label>
+        <input type="number" id="accommodates" name="accommodates" min="0" required>
+
+        <label for="bathrooms">Bathrooms</label>
+        <input type="number" id="bathrooms" name="bathrooms" min="0" required>
+
+        <label for="availability_365">Availability (days)</label>
+        <input type="number" id="availability_365" name="availability_365" min="0" required>
+
+        <label for="bedrooms">Bedrooms</label>
+        <input type="number" id="bedrooms" name="bedrooms" min="0" required>
+
+        <label for="beds">Beds</label>
+        <input type="number" id="beds" name="beds" min="0" required>
+
+        <label for="minimum_nights">Minimum Nights</label>
+        <input type="number" id="minimum_nights" name="minimum_nights" min="0" required>
+
+        <button type="button" id="predictBtn">Predict</button>
+
+        <div class="loading" id="loading" style="display: none;">Loading...</div>
+        <div class="output" id="output"></div>
+    </form>
+
+    <script>
+        document.getElementById('predictBtn').addEventListener('click', function() {
+            const form = document.getElementById('predictionForm');
+            const data = {
+                neighbourhood: form.neighbourhood.value,
+                room_type: form.room_type.value,
+                accommodates: Number(form.accommodates.value),
+                bathrooms: Number(form.bathrooms.value),
+                availability_365: Number(form.availability_365.value),
+                bedrooms: Number(form.bedrooms.value),
+                beds: Number(form.beds.value),
+                minimum_nights: Number(form.minimum_nights.value),
+            };
+
+            const loading = document.getElementById('loading');
+            const output = document.getElementById('output');
+            loading.style.display = 'block';
+            output.innerHTML = '';
+
+            fetch('/prediction', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    loading.style.display = 'none';
+                    if (data.success) {
+                        output.className = 'output success';
+                        output.innerText = `The predicted price is: $${data.prediction}`;
+                    } else {
+                        output.className = 'output error';
+                        output.innerText = `Error: ${data.error}`;
+                    }
+                })
+                .catch(error => {
+                    loading.style.display = 'none';
+                    output.className = 'output error';
+                    output.innerText = `Error: ${error.message}`;
+                });
+        });
+    </script>
+</body>
+</html>
