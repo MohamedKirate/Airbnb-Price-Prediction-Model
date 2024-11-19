@@ -54,12 +54,12 @@ Follow these steps to set up the project:
 
 1. **Clone the Repository**:  
    ```bash
-   git clone https://github.com/yourusername/house-prediction-project.git
+   git clone https://github.com/MohamedKirate/Airbnb-Price-Prediction-Model.git
    ```
 
 2. **Navigate to the Project Directory**:  
    ```bash
-   cd house-prediction-project
+   cd Airbnb-Price-Prediction-Model
    ```  
 
 3. **Install Dependencies**:  
