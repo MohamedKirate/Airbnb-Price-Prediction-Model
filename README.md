@@ -43,7 +43,7 @@ We built a user-friendly interface where users can test the model without needin
 > **Welcome Page**: A screenshot of the prediction website's homepage.  .
 
 ![Website Screenshot](data/images/website2.jpg)
-![Website Screenshot](data/images/website2.jpg)  
+![Website Screenshot](data/images/website3.jpg)  
 > **Prediction Interface**: Screenshot showing the interface for entering inputs and viewing predictions. 
 
 ---
